@@ -23,19 +23,7 @@ namespace Snowly.WebAPI
             // Add services to the container.
 
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-            var smtpServer = Environment.GetEnvironmentVariable("EMAIL_SMTP");
-            var smtpPort = int.Parse(Environment.GetEnvironmentVariable("EMAIL_PORT") ?? "587");
-            var senderEmail = Environment.GetEnvironmentVariable("EMAIL_SENDER");
-            var senderPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
-            var senderName = Environment.GetEnvironmentVariable("EMAIL_SENDER_NAME");
-
-            var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
-            var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
-            var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-            var jwtExpiration = int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRATION") ?? "60");
-
-            var encryptionKey = Environment.GetEnvironmentVariable("ENCRYPTION_KEY");
-
+           
 
             builder.Services.AddCors(options =>
             {
