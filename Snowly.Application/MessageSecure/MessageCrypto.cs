@@ -10,11 +10,12 @@ namespace Snowly.Application.MessageSecure
 {
     public  class MessageCrypto
     {
-        private readonly string? _key;
+        private readonly string _key;
 
-        public MessageCrypto(IConfiguration configuration)
+        public MessageCrypto()
         {
-            _key = configuration["CryptoSettings:EncryptionKey"];
+            _key = Environment.GetEnvironmentVariable("ENCRYPTION_KEY")
+                   ?? throw new Exception("ENCRYPTION_KEY not set");
         }
 
         /// <summary>

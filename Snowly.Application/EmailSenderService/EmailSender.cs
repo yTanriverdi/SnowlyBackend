@@ -13,10 +13,19 @@ namespace Snowly.Application.EmailSenderService
 {
     public class EmailSender
     {
-        private readonly IConfiguration _configuration;
-        public EmailSender(IConfiguration configuration)
+        private readonly string _smtpServer;
+        private readonly int _smtpPort;
+        private readonly string _senderName;
+        private readonly string _senderEmail;
+        private readonly string _password;
+
+        public EmailSender()
         {
-            _configuration = configuration;
+            _smtpServer = Environment.GetEnvironmentVariable("EMAIL_SMTP") ?? throw new Exception("EMAIL_SMTP not set");
+            _smtpPort = int.Parse(Environment.GetEnvironmentVariable("EMAIL_PORT") ?? "587");
+            _senderName = Environment.GetEnvironmentVariable("EMAIL_SENDER_NAME") ?? "Snowly";
+            _senderEmail = Environment.GetEnvironmentVariable("EMAIL_SENDER") ?? throw new Exception("EMAIL_SENDER not set");
+            _password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD") ?? throw new Exception("EMAIL_PASSWORD not set");
         }
         public async Task<bool> SendMail(string email, string code)
         {
@@ -29,16 +38,10 @@ namespace Snowly.Application.EmailSenderService
 
             try
             {
-                var fromName = _configuration["EmailSettings:SenderName"];
-                var fromAddress = _configuration["EmailSettings:SenderEmail"];
-                var smtpServer = _configuration["EmailSettings:SmtpServer"];
-                var smtpPort = int.Parse(_configuration["EmailSettings:Port"]);
-                var password = _configuration["EmailSettings:AppPassword"];
-
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress(fromName, fromAddress));
+                message.From.Add(new MailboxAddress(_senderName, _senderEmail));
                 message.To.Add(MailboxAddress.Parse(email));
-                message.Subject = "Snowly Kayıt Doğrulama Kodu";
+                message.Subject = "Snowly Kayıt Doğrulama İşlemi";
                 message.Body = new TextPart("html")
                 {
                     Text = htmlBody
@@ -46,8 +49,8 @@ namespace Snowly.Application.EmailSenderService
 
                 using (var client = new SmtpClient())
                 {
-                    await client.ConnectAsync(smtpServer, smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
-                    await client.AuthenticateAsync(fromAddress, password);
+                    await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
+                    await client.AuthenticateAsync(_senderEmail, _password);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
                 }

@@ -7,7 +7,7 @@ namespace Snowly.WebAPI.JwtToken
 {
     public class JwtTokenService
     {
-        public static string GenerateToken(string userId, string name, string email, string role, IConfiguration configuration)
+        public static string GenerateToken(string userId, string name, string email, string role)
         {
             List<Claim> claims = new List<Claim>
             {
@@ -17,13 +17,20 @@ namespace Snowly.WebAPI.JwtToken
             new Claim(ClaimTypes.Role, role)
         };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]));
-            var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var key = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new Exception("JWT_KEY not set");
+            var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new Exception("JWT_ISSUER not set");
+            var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new Exception("JWT_AUDIENCE not set");
+            var expirationMinutes = int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRATION") ?? "60");
 
-            DateTime expirationTime = DateTime.UtcNow.AddMinutes(Convert.ToInt32(configuration["JWT:Expiration"]));
+
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            DateTime expirationTime = DateTime.UtcNow.AddMinutes(Convert.ToInt32(expirationMinutes));
             JwtSecurityToken token = new JwtSecurityToken(
-                issuer: configuration["JWT:Issuer"],
-                audience: configuration["JWT:Audience"],
+                issuer: issuer,
+                audience: audience,
                 claims: claims,
                 notBefore: DateTime.UtcNow,
                 expires: expirationTime,

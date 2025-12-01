@@ -1,5 +1,6 @@
 ﻿using Snowly.Application.Commands.ConfirmCodeCommands.ConfirmCodeInterfaces;
 using Snowly.Application.Commands.UserCommands.UserInterfaces;
+using Snowly.Application.EmailSenderService;
 using Snowly.Application.Interfaces;
 using Snowly.Application.MessageSecure;
 using Snowly.Infrastructure.Repositories.ConfirmCodeRepositories;
@@ -26,6 +27,7 @@ namespace Snowly.WebAPI.Extensions
             services.AddScoped<IUserConfirmCodeRepository, UserConfirmCodeRepository>();
             services.AddScoped<IJCMRepository, JCMRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<EmailSender>();
             services.AddScoped<MessageCrypto>();
             return services;
         }

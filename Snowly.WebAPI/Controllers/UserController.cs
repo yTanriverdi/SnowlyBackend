@@ -24,12 +24,10 @@ namespace Snowly.WebAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IConfiguration _configuration;
         private readonly IHubContext<SnowlyChatHub> _snowlyChatHubContext;
         public UserController(IMediator mediator, IConfiguration configuration, IHubContext<SnowlyChatHub> snowlyChatHubContext)
         {
             _mediator = mediator;
-            _configuration = configuration;
             _snowlyChatHubContext = snowlyChatHubContext;
         }
 
@@ -54,7 +52,7 @@ namespace Snowly.WebAPI.Controllers
         {
             ApplicationHandlerResponse<LoginUserResponse> loginUserResult = await _mediator.Send(loginUserCommand, cancellationToken).ConfigureAwait(false);
             if (!loginUserResult.Success) return BadRequest(ApiResponse.FailResponse(loginUserResult.Message, 400));
-            string jwtToken = JwtTokenService.GenerateToken(loginUserResult.Data!.UserId.ToString(), loginUserResult.Data.FirstName + " " + loginUserResult.Data.LastName, loginUserResult.Data.Email, loginUserResult.Data.Role, _configuration);
+            string jwtToken = JwtTokenService.GenerateToken(loginUserResult.Data!.UserId.ToString(), loginUserResult.Data.FirstName + " " + loginUserResult.Data.LastName, loginUserResult.Data.Email, loginUserResult.Data.Role);
             loginUserResult.Data.JwtToken = jwtToken;
             return Ok(ApiResponse<LoginUserResponse>.SuccessResponse(loginUserResult.Data!, loginUserResult.Message, 200));
         }

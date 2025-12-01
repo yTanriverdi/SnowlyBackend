@@ -7,6 +7,7 @@ using Snowly.Application;
 using Snowly.Application.EmailSenderService;
 using Snowly.Infrastructure.SnowlyDatabase;
 using Snowly.WebAPI.Extensions;
+using Snowly.WebAPI.JwtToken;
 using Snowly.WebAPI.SignalRControl;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
@@ -26,6 +27,7 @@ namespace Snowly.WebAPI
             var smtpPort = int.Parse(Environment.GetEnvironmentVariable("EMAIL_PORT") ?? "587");
             var senderEmail = Environment.GetEnvironmentVariable("EMAIL_SENDER");
             var senderPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
+            var senderName = Environment.GetEnvironmentVariable("EMAIL_SENDER_NAME");
 
             var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
             var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
@@ -33,6 +35,7 @@ namespace Snowly.WebAPI
             var jwtExpiration = int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRATION") ?? "60");
 
             var encryptionKey = Environment.GetEnvironmentVariable("ENCRYPTION_KEY");
+
 
             builder.Services.AddCors(options =>
             {
@@ -96,7 +99,6 @@ namespace Snowly.WebAPI
 
 
             builder.Services.AddServices();
-            builder.Services.AddScoped<EmailSender>();
             builder.Services.ValidationRegistration();
 
             builder.Services.AddSignalR();
