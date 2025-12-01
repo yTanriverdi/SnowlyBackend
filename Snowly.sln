@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowly.Domain", "Snowly.Domain\Snowly.Domain.csproj", "{7F4777BE-A12D-4473-A622-ABE16C0EA8C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snowly.Domain", "Snowly.Domain\Snowly.Domain.csproj", "{7F4777BE-A12D-4473-A622-ABE16C0EA8C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowly.Infrastructure", "Snowly.Infrastructure\Snowly.Infrastructure.csproj", "{C25B87E1-F548-4CB6-9765-2763D04D599D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snowly.Infrastructure", "Snowly.Infrastructure\Snowly.Infrastructure.csproj", "{C25B87E1-F548-4CB6-9765-2763D04D599D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowly.Application", "Snowly.Application\Snowly.Application.csproj", "{3E8E503B-F51F-43D5-A52E-4B76549ADEB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snowly.Application", "Snowly.Application\Snowly.Application.csproj", "{3E8E503B-F51F-43D5-A52E-4B76549ADEB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowly.WebAPI", "Snowly.WebAPI\Snowly.WebAPI.csproj", "{3777570C-CB30-47F0-9078-3E66794D7DBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snowly.WebAPI", "Snowly.WebAPI\Snowly.WebAPI.csproj", "{3777570C-CB30-47F0-9078-3E66794D7DBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
