@@ -18,12 +18,12 @@ WORKDIR /app
 # Publish edilen dosyaları kopyala
 COPY --from=build /app/out .
 
-RUN apt-get update && apt-get install -y iputils-ping dnsutils
 
 ENV ASPNETCORE_URLS=http://*:${PORT}
 EXPOSE ${PORT}
 
 ENTRYPOINT ["dotnet", "Snowly.WebAPI.dll"]
+
 
 
 
