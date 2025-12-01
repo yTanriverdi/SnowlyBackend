@@ -2,26 +2,27 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Tüm repo kökünü kopyala (solution + projeler)
+# Repo kökünü tamamen kopyala
 COPY . .
 
-# Restore solution üzerinden
+# Restore tüm solution üzerinden
 RUN dotnet restore Snowly.sln
 
 # Publish API projesi
-RUN dotnet publish src/Snowly.WebAPI.csproj -c Release -o /app/out
+# Örnek: ana proje Snowly/Snowly.csproj
+RUN dotnet publish Snowly/Snowly.WebAPI.csproj -c Release -o /app/out
 
 # 2️⃣ Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
+
 COPY --from=build /app/out .
 
 # Render port
 ENV ASPNETCORE_URLS=http://*:${PORT}
 EXPOSE ${PORT}
 
-ENTRYPOINT ["dotnet", "Snowly.WebAPI.dll"]
-
+ENTRYPOINT ["dotnet", "Snowly.dll"]
 
 
 
