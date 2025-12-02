@@ -26,12 +26,6 @@ namespace Snowly.Application.EmailSenderService
             _senderName = Environment.GetEnvironmentVariable("EMAIL_SENDER_NAME") ?? "Snowly";
             _senderEmail = Environment.GetEnvironmentVariable("EMAIL_SENDER") ?? throw new Exception("EMAIL_SENDER not set");
             _password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD") ?? throw new Exception("EMAIL_PASSWORD not set");
-
-            Console.WriteLine($"EMAIL_SMTP: {_smtpServer}");
-            Console.WriteLine($"EMAIL_PORT: {_smtpPort}");
-            Console.WriteLine($"EMAIL_SENDER_NAME: {_senderName}");
-            Console.WriteLine($"EMAIL_SENDER: {_senderEmail}");
-            Console.WriteLine($"EMAIL_PASSWORD: {(_password != null ? new string('*', _password.Length) : "NULL")}");
         }
         public async Task<bool> SendMail(string email, string code)
         {
@@ -56,7 +50,7 @@ namespace Snowly.Application.EmailSenderService
                 using (var client = new SmtpClient())
                 {
                     await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
-                    await client.AuthenticateAsync(_senderEmail, _password);
+                    await client.AuthenticateAsync("apikey", _password);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
                 }
@@ -75,10 +69,6 @@ namespace Snowly.Application.EmailSenderService
             string templatePath;
             if(isPrivate) templatePath = Path.Combine(AppContext.BaseDirectory, "HTMLTemplates", "Snow.html");
             else templatePath = Path.Combine(AppContext.BaseDirectory, "HTMLTemplates", "NormalHtmlTemplate.html");
-
-            Console.WriteLine($"Template Path: {templatePath}");
-            Console.WriteLine($"Template Exists: {File.Exists(templatePath)}");
-
 
             if (!File.Exists(templatePath))
                 return "Mail İçeriği Bulunamadı";
