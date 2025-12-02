@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
 using Org.BouncyCastle.Security;
+using SendGrid.Helpers.Mail;
+using SendGrid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +15,19 @@ namespace Snowly.Application.EmailSenderService
 {
     public class EmailSender
     {
-        private readonly string _smtpServer;
-        private readonly int _smtpPort;
         private readonly string _senderName;
         private readonly string _senderEmail;
-        private readonly string _password;
+        private readonly string _apiKey;
 
         public EmailSender()
         {
-            _smtpServer = Environment.GetEnvironmentVariable("EMAIL_SMTP") ?? throw new Exception("EMAIL_SMTP not set");
-            _smtpPort = int.Parse(Environment.GetEnvironmentVariable("EMAIL_PORT") ?? "587");
             _senderName = Environment.GetEnvironmentVariable("EMAIL_SENDER_NAME") ?? "Snowly";
             _senderEmail = Environment.GetEnvironmentVariable("EMAIL_SENDER") ?? throw new Exception("EMAIL_SENDER not set");
-            _password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD") ?? throw new Exception("EMAIL_PASSWORD not set");
+            _apiKey = Environment.GetEnvironmentVariable("EMAIL_PASSWORD") ?? throw new Exception("EMAIL_PASSWORD not set");
+
+            Console.WriteLine($"EMAIL_SENDER_NAME: {_senderName}");
+            Console.WriteLine($"EMAIL_SENDER: {_senderEmail}");
+            Console.WriteLine($"EMAIL_PASSWORD: {(_apiKey != null ? new string('*', _apiKey.Length) : "NULL")}");
         }
         public async Task<bool> SendMail(string email, string code)
         {
@@ -36,38 +38,69 @@ namespace Snowly.Application.EmailSenderService
             else
                 htmlBody = await LoadSnowEmailTemplateAsync(code, false);
 
+            //try
+            //{
+            //    var message = new MimeMessage();
+            //    message.From.Add(new MailboxAddress(_senderName, _senderEmail));
+            //    message.To.Add(MailboxAddress.Parse(email));
+            //    message.Subject = "Snowly Kayıt Doğrulama İşlemi";
+            //    message.Body = new TextPart("html")
+            //    {
+            //        Text = htmlBody
+            //    };
+
+            //    using (var client = new SmtpClient())
+            //    {
+            //        Console.WriteLine("Connecting to SMTP...");
+            //        await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
+            //        Console.WriteLine("Connected. Authenticating...");
+
+            //        await client.AuthenticateAsync("apikey", _password);
+            //        Console.WriteLine("Authenticated. Sending message...");
+
+            //        await client.SendAsync(message);
+            //        Console.WriteLine("Message sent. Disconnecting...");
+
+            //        await client.DisconnectAsync(true);
+            //        Console.WriteLine("Disconnected.");
+            //    }
+
+            //    return true;
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.ToString());
+            //    return false;
+            //}
             try
             {
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress(_senderName, _senderEmail));
-                message.To.Add(MailboxAddress.Parse(email));
-                message.Subject = "Snowly Kayıt Doğrulama İşlemi";
-                message.Body = new TextPart("html")
+                var client = new SendGridClient(_apiKey);
+                var from = new EmailAddress(_senderEmail, _senderName);
+                var subject = "Snowly Kayıt Doğrulama İşlemi";
+                var to = new EmailAddress(email);
+                var plainTextContent = "Snowly Kayıt Doğrulama İşlemi";
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlBody);
+
+                Console.WriteLine("Sending email via SendGrid API...");
+                var response = await client.SendEmailAsync(msg);
+
+                Console.WriteLine($"SendGrid Response Status: {response.StatusCode}");
+                if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
                 {
-                    Text = htmlBody
-                };
-
-                using (var client = new SmtpClient())
-                {
-                    Console.WriteLine("Connecting to SMTP...");
-                    await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
-                    Console.WriteLine("Connected. Authenticating...");
-
-                    await client.AuthenticateAsync("apikey", _password);
-                    Console.WriteLine("Authenticated. Sending message...");
-
-                    await client.SendAsync(message);
-                    Console.WriteLine("Message sent. Disconnecting...");
-
-                    await client.DisconnectAsync(true);
-                    Console.WriteLine("Disconnected.");
+                    Console.WriteLine("Email sent successfully.");
+                    return true;
                 }
-
-                return true;
+                else
+                {
+                    Console.WriteLine("Failed to send email.");
+                    string body = await response.Body.ReadAsStringAsync();
+                    Console.WriteLine($"Response body: {body}");
+                    return false;
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine("EMAIL SEND ERROR -> " + ex.ToString());
                 return false;
             }
         }
