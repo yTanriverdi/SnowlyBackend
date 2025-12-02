@@ -49,10 +49,18 @@ namespace Snowly.Application.EmailSenderService
 
                 using (var client = new SmtpClient())
                 {
+                    Console.WriteLine("Connecting to SMTP...");
                     await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
+                    Console.WriteLine("Connected. Authenticating...");
+
                     await client.AuthenticateAsync("apikey", _password);
+                    Console.WriteLine("Authenticated. Sending message...");
+
                     await client.SendAsync(message);
+                    Console.WriteLine("Message sent. Disconnecting...");
+
                     await client.DisconnectAsync(true);
+                    Console.WriteLine("Disconnected.");
                 }
 
                 return true;
