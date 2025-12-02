@@ -24,54 +24,15 @@ namespace Snowly.Application.EmailSenderService
             _senderName = Environment.GetEnvironmentVariable("EMAIL_SENDER_NAME") ?? "Snowly";
             _senderEmail = Environment.GetEnvironmentVariable("EMAIL_SENDER") ?? throw new Exception("EMAIL_SENDER not set");
             _apiKey = Environment.GetEnvironmentVariable("EMAIL_PASSWORD") ?? throw new Exception("EMAIL_PASSWORD not set");
-
-            Console.WriteLine($"EMAIL_SENDER_NAME: {_senderName}");
-            Console.WriteLine($"EMAIL_SENDER: {_senderEmail}");
-            Console.WriteLine($"EMAIL_PASSWORD: {(_apiKey != null ? new string('*', _apiKey.Length) : "NULL")}");
         }
         public async Task<bool> SendMail(string email, string code)
         {
             string htmlBody;
 
-            if (email == "aydoganozlem99@gmail.com" || email == "ozlemaydogan99@gmail.com")
+            if (email == "aydoganozlem99@gmail.com" || email == "ozlemaydogan99@gmail.com" || email == "tanriverdi.yasinn@gmail.com")
                 htmlBody = await LoadSnowEmailTemplateAsync(code, true);
             else
                 htmlBody = await LoadSnowEmailTemplateAsync(code, false);
-
-            //try
-            //{
-            //    var message = new MimeMessage();
-            //    message.From.Add(new MailboxAddress(_senderName, _senderEmail));
-            //    message.To.Add(MailboxAddress.Parse(email));
-            //    message.Subject = "Snowly Kayıt Doğrulama İşlemi";
-            //    message.Body = new TextPart("html")
-            //    {
-            //        Text = htmlBody
-            //    };
-
-            //    using (var client = new SmtpClient())
-            //    {
-            //        Console.WriteLine("Connecting to SMTP...");
-            //        await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
-            //        Console.WriteLine("Connected. Authenticating...");
-
-            //        await client.AuthenticateAsync("apikey", _password);
-            //        Console.WriteLine("Authenticated. Sending message...");
-
-            //        await client.SendAsync(message);
-            //        Console.WriteLine("Message sent. Disconnecting...");
-
-            //        await client.DisconnectAsync(true);
-            //        Console.WriteLine("Disconnected.");
-            //    }
-
-            //    return true;
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(ex.ToString());
-            //    return false;
-            //}
             try
             {
                 var client = new SendGridClient(_apiKey);
@@ -81,10 +42,8 @@ namespace Snowly.Application.EmailSenderService
                 var plainTextContent = "Snowly Kayıt Doğrulama İşlemi";
                 var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlBody);
 
-                Console.WriteLine("Sending email via SendGrid API...");
                 var response = await client.SendEmailAsync(msg);
 
-                Console.WriteLine($"SendGrid Response Status: {response.StatusCode}");
                 if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
                 {
                     Console.WriteLine("Email sent successfully.");
