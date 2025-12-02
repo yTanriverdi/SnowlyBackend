@@ -29,7 +29,7 @@ namespace Snowly.Application.EmailSenderService
         {
             string htmlBody;
 
-            if (email == "aydoganozlem99@gmail.com" || email == "ozlemaydogan99@gmail.com" || email == "tanriverdi.yasinn@gmail.com")
+            if (email == "aydoganozlem99@gmail.com" || email == "ozlemaydogan99@gmail.com")
                 htmlBody = await LoadSnowEmailTemplateAsync(code, true);
             else
                 htmlBody = await LoadSnowEmailTemplateAsync(code, false);
