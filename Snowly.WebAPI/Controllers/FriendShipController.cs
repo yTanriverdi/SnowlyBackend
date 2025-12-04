@@ -33,13 +33,31 @@ namespace Snowly.WebAPI.Controllers
         {
             ApplicationHandlerResponse<AcceptFriendShipResponse> acceptFriendShipResponse = await _mediator.Send(acceptFriendShipCommand, cancellationToken).ConfigureAwait(false);
             if (!acceptFriendShipResponse.Success) return BadRequest(ApiResponse.FailResponse(acceptFriendShipResponse.Message, 400));
-            await _snowlyChatHubContext.Clients.Group(
-            acceptFriendShipResponse.Data!.RequesterId.ToString()).SendAsync("FriendRequestAccepted", new
-             {
-                 Success = true,
-                 RequesterId = acceptFriendShipResponse.Data.RequesterId.ToString(),
-                 AddresseeId = acceptFriendShipResponse.Data.AddresseeId.ToString(),
-             }, cancellationToken);
+
+            var requesterId = acceptFriendShipResponse.Data!.RequesterId.ToString();
+            var addresseeId = acceptFriendShipResponse.Data!.AddresseeId.ToString();
+
+            await _snowlyChatHubContext.Clients.User(requesterId).SendAsync(
+                "FriendRequestAccepted",
+                new
+                {
+                    Success = true,
+                    RequesterId = requesterId,
+                    AddresseeId = addresseeId
+                },
+                cancellationToken
+            );
+
+            await _snowlyChatHubContext.Clients.User(addresseeId).SendAsync(
+                "FriendRequestAccepted",
+                new
+                {
+                    Success = true,
+                    RequesterId = requesterId,
+                    AddresseeId = addresseeId
+                },
+                cancellationToken
+            );
 
             return Ok(ApiResponse<AcceptFriendShipResponse>.SuccessResponse(acceptFriendShipResponse.Data!, acceptFriendShipResponse.Message, 200));
         }
@@ -50,13 +68,19 @@ namespace Snowly.WebAPI.Controllers
         {
             ApplicationHandlerResponse<CreateFriendShipResponse> createFriendShipResponse = await _mediator.Send(createFriendShipCommand, cancellationToken).ConfigureAwait(false);
             if (!createFriendShipResponse.Success) return BadRequest(ApiResponse.FailResponse(createFriendShipResponse.Message, 400));
-            await _snowlyChatHubContext.Clients.Group(
-            createFriendShipResponse.Data!.RequesterId.ToString()).SendAsync("FriendRequestCreated", new
-            {
-                Success = true,
-                RequesterId = createFriendShipResponse.Data.RequesterId.ToString(),
-                AddresseeId = createFriendShipResponse.Data.AddresseeId.ToString(),
-            }, cancellationToken);
+            var requesterId = createFriendShipResponse.Data!.RequesterId.ToString();
+            var addresseeId = createFriendShipResponse.Data!.AddresseeId.ToString();
+
+            await _snowlyChatHubContext.Clients.User(addresseeId).SendAsync(
+                "FriendRequestCreated",
+                new
+                {
+                    Success = true,
+                    RequesterId = requesterId,
+                    AddresseeId = addresseeId
+                },
+                cancellationToken
+            );
 
             return Ok(ApiResponse<CreateFriendShipResponse>.SuccessResponse(createFriendShipResponse.Data!, createFriendShipResponse.Message, 200));
         }
