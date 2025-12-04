@@ -29,7 +29,7 @@ namespace Snowly.WebAPI.Controllers
 
         [Authorize("UserOrAdmin")]
         [HttpPost("AcceptFriendShip")]
-        public async Task<IActionResult> AcceptFriendShip(AcceptFriendShipCommand acceptFriendShipCommand, CancellationToken cancellationToken)
+        public async Task<IActionResult> AcceptFriendShip([FromBody] AcceptFriendShipCommand acceptFriendShipCommand, CancellationToken cancellationToken)
         {
             ApplicationHandlerResponse<AcceptFriendShipResponse> acceptFriendShipResponse = await _mediator.Send(acceptFriendShipCommand, cancellationToken).ConfigureAwait(false);
             if (!acceptFriendShipResponse.Success) return BadRequest(ApiResponse.FailResponse(acceptFriendShipResponse.Message, 400));
@@ -46,7 +46,7 @@ namespace Snowly.WebAPI.Controllers
 
         [Authorize("UserOrAdmin")]
         [HttpPost("AddFriendShip")]
-        public async Task<IActionResult> AddFriendShip(CreateFriendShipCommand createFriendShipCommand, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddFriendShip([FromBody] CreateFriendShipCommand createFriendShipCommand, CancellationToken cancellationToken)
         {
             ApplicationHandlerResponse<CreateFriendShipResponse> createFriendShipResponse = await _mediator.Send(createFriendShipCommand, cancellationToken).ConfigureAwait(false);
             if (!createFriendShipResponse.Success) return BadRequest(ApiResponse.FailResponse(createFriendShipResponse.Message, 400));
@@ -64,7 +64,7 @@ namespace Snowly.WebAPI.Controllers
 
         [Authorize("UserOrAdmin")]
         [HttpPost("DeleteFriendShip")]
-        public async Task<IActionResult> DeleteFriendShip(DeleteFriendShipCommand deleteFriendShipCommand, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteFriendShip([FromBody] DeleteFriendShipCommand deleteFriendShipCommand, CancellationToken cancellationToken)
         {
             ApplicationHandlerResponse<DeleteFriendShipResponse> deleteFriendShipResponse = await _mediator.Send(deleteFriendShipCommand, cancellationToken).ConfigureAwait(false);
             if (!deleteFriendShipResponse.Success) return BadRequest(ApiResponse.FailResponse(deleteFriendShipResponse.Message, 400));
@@ -74,7 +74,7 @@ namespace Snowly.WebAPI.Controllers
 
         [Authorize("UserOrAdmin")]
         [HttpGet("GetAllAcceptedFriendShip")]
-        public async Task<IActionResult> GetAllAcceptedFriendShip(GetAllAcceptedFriendShipQuery getAllAcceptedFriendShipQuery, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllAcceptedFriendShip([FromQuery] GetAllAcceptedFriendShipQuery getAllAcceptedFriendShipQuery, CancellationToken cancellationToken)
         {
             ApplicationHandlerResponse<List<GetAllAcceptedFriendShipResponse>> acceptedFriendShipsResponse = await _mediator.Send(getAllAcceptedFriendShipQuery, cancellationToken).ConfigureAwait(false);
             return Ok(ApiResponse<List<GetAllAcceptedFriendShipResponse>>.SuccessResponse(acceptedFriendShipsResponse.Data, acceptedFriendShipsResponse.Message, 200));
@@ -83,7 +83,7 @@ namespace Snowly.WebAPI.Controllers
         
         [Authorize("UserOrAdmin")]
         [HttpGet("GetAllPendingFriendShipForRequester")]
-        public async Task<IActionResult> GetAllPendingFriendShipForRequester(GetAllPendingFriendShipQuery getAllPendingFriendShipQuery, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllPendingFriendShipForRequester([FromQuery] GetAllPendingFriendShipQuery getAllPendingFriendShipQuery, CancellationToken cancellationToken)
         {
             ApplicationHandlerResponse<List<GetAllPendingFriendShipResponse>> pendingFriendShipsResponse = await _mediator.Send(getAllPendingFriendShipQuery, cancellationToken).ConfigureAwait(false);
             return Ok(ApiResponse<List<GetAllPendingFriendShipResponse>>.SuccessResponse(pendingFriendShipsResponse.Data, pendingFriendShipsResponse.Message, 200));
@@ -91,7 +91,7 @@ namespace Snowly.WebAPI.Controllers
 
         [Authorize("UserOrAdmin")]
         [HttpGet("GetAllPendingFriendShipForAddressee")]
-        public async Task<IActionResult> GetAllPendingFriendShipForAddressee(GetAllPendingFriendShipsForAddresseeQuery getAllPendingFriendShipsForAddresseeQuery, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllPendingFriendShipForAddressee([FromQuery] GetAllPendingFriendShipsForAddresseeQuery getAllPendingFriendShipsForAddresseeQuery, CancellationToken cancellationToken)
         {
             ApplicationHandlerResponse<List<GetAllPendingFriendShipsForAddresseeResponse>> pendingFriendShipsResponse = await _mediator.Send(getAllPendingFriendShipsForAddresseeQuery, cancellationToken).ConfigureAwait(false);
             return Ok(ApiResponse<List<GetAllPendingFriendShipsForAddresseeResponse>>.SuccessResponse(pendingFriendShipsResponse.Data, pendingFriendShipsResponse.Message, 200));
