@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -9,6 +10,7 @@ using Snowly.Infrastructure.SnowlyDatabase;
 using Snowly.WebAPI.Extensions;
 using Snowly.WebAPI.JwtToken;
 using Snowly.WebAPI.SignalRControl;
+using Snowly.WebAPI.UserIdentifier;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -103,6 +105,7 @@ namespace Snowly.WebAPI
 
 
             builder.Services.AddServices();
+            builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
             builder.Services.ValidationRegistration();
 
             builder.Services.AddSignalR();
