@@ -28,14 +28,26 @@ namespace Snowly.WebAPI
             var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowFrontend", policy =>
+                //options.AddPolicy("AllowFrontend", policy =>
+                //{
+                //    policy.AllowAnyHeader()
+                //          .AllowAnyMethod()
+                //          .AllowCredentials();
+                //    policy.AllowAnyOrigin()
+                //          .AllowAnyHeader()
+                //          .AllowAnyMethod();
+                //});
+                options.AddPolicy("snowlyPolicy", policy =>
                 {
-                    //policy.AllowAnyHeader()
-                    //      .AllowAnyMethod()
-                    //      .AllowCredentials();
-                    policy.AllowAnyOrigin()
-                          .AllowAnyHeader()
-                          .AllowAnyMethod();
+                    policy
+                        .WithOrigins(
+                            "http://localhost:5173",
+                            "http://192.168.1.8:5173",
+                            "https://seninfrontenddomainin.com"
+                        )
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
 
@@ -111,7 +123,7 @@ namespace Snowly.WebAPI
             }
 
 
-            app.UseCors("AllowFrontend");
+            app.UseCors("snowlyPolicy");
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
@@ -119,7 +131,7 @@ namespace Snowly.WebAPI
             app.UseStaticFiles();
 
             app.MapControllers();
-            app.MapHub<SnowlyChatHub>("/snowlyHub");
+            app.MapHub<SnowlyChatHub>("/snowlyHub").RequireCors("snowlyPolicy");
 
             app.Run();
         }
