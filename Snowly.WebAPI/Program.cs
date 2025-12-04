@@ -126,9 +126,9 @@ namespace Snowly.WebAPI
             }
 
 
+            app.UseRouting();
             app.UseCors("snowlyPolicy");
             //app.UseHttpsRedirection();  // REDIRECTION KALKTI
-            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();
