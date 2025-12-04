@@ -30,9 +30,12 @@ namespace Snowly.WebAPI
             {
                 options.AddPolicy("AllowFrontend", policy =>
                 {
-                    policy.AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials();
+                    //policy.AllowAnyHeader()
+                    //      .AllowAnyMethod()
+                    //      .AllowCredentials();
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
                 });
             });
 
