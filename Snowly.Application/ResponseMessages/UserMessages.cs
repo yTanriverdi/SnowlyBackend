@@ -4,7 +4,7 @@
     {
         public const string UserNotFound = "Kullanıcı bulunamadı";
         public const string UserFound = "Kullanıcı bulundu";
-        public const string UserAlreadyExists = "Bu email ile zaten bir kullanıcı var";
+        public const string UserAlreadyExists = "Bu E-Posta kullanılıyor";
         public const string UserCreatedSuccessfully = "Kullanıcı başarıyla oluşturuldu";
         public const string InvalidPassword = "Geçersiz parola";
         public const string Unauthorized = "Yetkisiz erişim";
