@@ -16,7 +16,7 @@
         public const string WrongPassword = "Şifre yanlış";
         public const string SuccessPasswordChange = "Şifre güncelleme başarılı";
         public const string FailPasswordChange = "Şifre güncelleme başarısız";
-        public const string StillWrongConfirmCode = "Hesabınız henüz onaylanmamış E-postanızı kontrol edin";
+        public const string StillWrongConfirmCode = "Hesabınız henüz onaylanmamış E-Postanızı kontrol edin";
         public const string OnlineStatusChangeFail = "Çevrimiçi durumu güncellenemedi";
         public const string OnlineStatusChangeSuccess = "Çevrimiçi durumu güncellendi";
     }
