@@ -11,7 +11,7 @@
         public const string UserDeleteFail = "Kullanıcı silinemedi";
         public const string UserDeleteSuccess = "Kullanıcı silindi";
         public const string UserUpdateSuccess = "Kullanıcı güncelleme başarılı";
-        public const string WrongEmailOrPassword = "Email veya şifre yanlış";
+        public const string WrongEmailOrPassword = "E-Posta veya şifre yanlış";
         public const string LoginAccess = "Giriş başarılı";
         public const string WrongPassword = "Şifre yanlış";
         public const string SuccessPasswordChange = "Şifre güncelleme başarılı";
