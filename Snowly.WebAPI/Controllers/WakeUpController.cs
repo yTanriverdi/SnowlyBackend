@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Snowly.Application.Commands.FriendShipCommands.AcceptFriendShip;
 using Snowly.WebAPI.APIResponse;
@@ -14,5 +15,15 @@ namespace Snowly.WebAPI.Controllers
         {
             return Ok(ApiResponse<bool>.SuccessResponse(true, "Kullanıma hazır", 200));
         }
+
+        [HttpGet("WakeAuth")]
+        [Authorize("UserOrAdmin")]
+        public IActionResult WakeAuth()
+        {
+            return Ok(ApiResponse<bool>.SuccessResponse(true, "Kullanıma hazır", 200));
+        }
     }
+
+    
+
 }
