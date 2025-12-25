@@ -2,6 +2,7 @@
 using Snowly.Application.Interfaces;
 using Snowly.Application.Response;
 using Snowly.Application.ResponseMessages;
+using Snowly.Domain.Entities;
 
 namespace Snowly.Application.Queries.FriendShipQueries.GetAllAcceptedFriendShips
 {
@@ -19,14 +20,23 @@ namespace Snowly.Application.Queries.FriendShipQueries.GetAllAcceptedFriendShips
             var acceptedFriendShips = await _friendShipRepository.AllAcceptedFriendShipAsync(request.RequesterId, cancellationToken).ConfigureAwait(false);
             if (!acceptedFriendShips.Any())
                 return ApplicationHandlerResponse<List<GetAllAcceptedFriendShipResponse>>.Ok(new List<GetAllAcceptedFriendShipResponse>(), FriendShipMessages.FriendShipsAcceptedNo);
-            List<GetAllAcceptedFriendShipResponse> getAllAcceptedFriendShipResponses = acceptedFriendShips.Select(x => new GetAllAcceptedFriendShipResponse()
+
+            List<GetAllAcceptedFriendShipResponse> allFriendShips = acceptedFriendShips.Select(f =>
             {
-                AddresseeId = x.AddresseeId,
-                RequesterId = x.RequesterId,
-                RequesterUser = x.Requester!,
-                AddresseeUser = x.Addressee!
+                var friend = f.RequesterId == request.RequesterId
+                    ? f.Addressee!
+                    : f.Requester!;
+
+                return new GetAllAcceptedFriendShipResponse
+                {
+                    FriendShipId = f.Id,
+                    FriendId = friend.Id,
+                    FullName = $"{friend.FirstName} {friend.LastName}",
+                    Email = friend.Email,
+                    IsOnline = friend.IsOnline
+                };
             }).ToList();
-            return ApplicationHandlerResponse<List<GetAllAcceptedFriendShipResponse>>.Ok(getAllAcceptedFriendShipResponses, $"Toplam {acceptedFriendShips.Count} arkadaşınız var");
+            return ApplicationHandlerResponse<List<GetAllAcceptedFriendShipResponse>>.Ok(allFriendShips, $"Toplam {allFriendShips.Count} arkadaşınız var");
         }
     }
 }

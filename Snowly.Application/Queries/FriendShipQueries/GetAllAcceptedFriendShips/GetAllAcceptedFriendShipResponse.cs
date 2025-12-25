@@ -4,10 +4,10 @@ namespace Snowly.Application.Queries.FriendShipQueries.GetAllAcceptedFriendShips
 {
     public sealed class GetAllAcceptedFriendShipResponse
     {
-        public Guid Id { get; set; }
-        public Guid AddresseeId { get; set; }
-        public Guid RequesterId { get; set; }
-        public User AddresseeUser { get; set; } = null!;
-        public User RequesterUser { get; set; } = null!;
+        public Guid FriendShipId { get; set; }
+        public Guid FriendId { get; set; }
+        public string FullName { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public bool IsOnline { get; set; }
     }
 }
