@@ -24,7 +24,7 @@ namespace Snowly.Infrastructure.Repositories.FriendShipRepositories
 
         public async Task<List<FriendShip>> AllAcceptedFriendShipAsync(Guid userId, CancellationToken cancellationToken)
         {
-            List<FriendShip> acceptedFriendShips = await _snowlyDbContext.Friendships.Where(x => x.Status == FriendShipStatus.Accepted && x.RequesterId == userId).Include(x => x.Addressee).Include(x => x.Requester).ToListAsync(cancellationToken).ConfigureAwait(false);
+            List<FriendShip> acceptedFriendShips = await _snowlyDbContext.Friendships.Where(x => x.Status == FriendShipStatus.Accepted && (x.RequesterId == userId || x.AddresseeId == userId)).Include(x => x.Addressee).Include(x => x.Requester).ToListAsync(cancellationToken).ConfigureAwait(false);
             return acceptedFriendShips;
         }
 
