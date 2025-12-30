@@ -20,12 +20,18 @@ namespace Snowly.Application.Queries.FriendShipQueries.GetAllPendingFriendShips
             var pendingFriendShips = await _friendShipRepository.AllPendingFriendShipAsync(request.RequesterId, cancellationToken).ConfigureAwait(false);
             if (!pendingFriendShips.Any())
                 return ApplicationHandlerResponse<List<GetAllPendingFriendShipResponse>>.Ok(new List<GetAllPendingFriendShipResponse>(), FriendShipMessages.FriendShipsPendingNo);
-            List<GetAllPendingFriendShipResponse> getAllPendingFriendShipResponses = pendingFriendShips.Select(x => new GetAllPendingFriendShipResponse()
+            List<GetAllPendingFriendShipResponse> getAllPendingFriendShipResponses = pendingFriendShips.Select(f =>
             {
-                AddresseeId = x.AddresseeId,
-                RequesterId = x.RequesterId,
-                RequesterUser = x.Requester!,
-                AddresseeUser = x.Addressee!
+                var addressee = f.Addressee!;
+
+                return new GetAllPendingFriendShipResponse
+                {
+                    FriendShipId = f.Id,
+                    FriendId = addressee.Id,
+                    FullName = $"{addressee.FirstName} {addressee.LastName}",
+                    Email = addressee.Email,
+                    IsOnline = addressee.IsOnline
+                };
             }).ToList();
             return ApplicationHandlerResponse<List<GetAllPendingFriendShipResponse>>.Ok(getAllPendingFriendShipResponses, $"Bekleyen {pendingFriendShips.Count} arkadaşlık isteği mevcut");
         }

@@ -17,15 +17,21 @@ namespace Snowly.Application.Queries.FriendShipQueries.GetAllPendingFriendShipsF
 
         public async Task<ApplicationHandlerResponse<List<GetAllPendingFriendShipsForAddresseeResponse>>> Handle(GetAllPendingFriendShipsForAddresseeQuery request, CancellationToken cancellationToken)
         {
-            var pendingFriendShips = await _friendShipRepository.AllPendingFriendShipForAddresseeAsync(request.UserId, cancellationToken).ConfigureAwait(false);
+            var pendingFriendShips = await _friendShipRepository.AllPendingFriendShipForAddresseeAsync(request.AddresseeId, cancellationToken).ConfigureAwait(false);
             if (!pendingFriendShips.Any())
                 return ApplicationHandlerResponse<List<GetAllPendingFriendShipsForAddresseeResponse>>.Ok(new List<GetAllPendingFriendShipsForAddresseeResponse>(), FriendShipMessages.FriendShipsPendingNo);
-            List<GetAllPendingFriendShipsForAddresseeResponse> getAllPendingFriendShipResponses = pendingFriendShips.Select(x => new GetAllPendingFriendShipsForAddresseeResponse()
+            List<GetAllPendingFriendShipsForAddresseeResponse> getAllPendingFriendShipResponses = pendingFriendShips.Select(f =>
             {
-                AddresseeId = x.AddresseeId,
-                RequesterId = x.RequesterId,
-                RequesterUser = x.Requester!,
-                AddresseeUser = x.Addressee!
+                var requester = f.Requester!;
+
+                return new GetAllPendingFriendShipsForAddresseeResponse
+                {
+                    FriendShipId = f.Id,
+                    FriendId = requester.Id,
+                    FullName = $"{requester.FirstName} {requester.LastName}",
+                    Email = requester.Email,
+                    IsOnline = requester.IsOnline
+                };
             }).ToList();
             return ApplicationHandlerResponse<List<GetAllPendingFriendShipsForAddresseeResponse>>.Ok(getAllPendingFriendShipResponses, $"Bekleyen {pendingFriendShips.Count} arkadaşlık isteği mevcut");
         }
