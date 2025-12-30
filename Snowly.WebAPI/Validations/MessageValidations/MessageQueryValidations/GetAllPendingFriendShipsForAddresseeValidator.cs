@@ -8,7 +8,7 @@ namespace Snowly.WebAPI.Validations.MessageValidations.MessageQueryValidations
     {
         public GetAllPendingFriendShipsForAddresseeValidator()
         {
-            RuleFor(x => x.UserId)
+            RuleFor(x => x.AddresseeId)
                 .NotEmpty().WithMessage("Kullanıcı Id zorunludur")
                 .NotEqual(Guid.Empty).WithMessage("Geçerli bir kullanıcı Id giriniz");
         }
