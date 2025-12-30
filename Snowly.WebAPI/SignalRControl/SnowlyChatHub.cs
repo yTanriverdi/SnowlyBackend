@@ -14,9 +14,14 @@ namespace Snowly.WebAPI.SignalRControl
             _friendShipRepository = friendShipRepository;
         }
 
-        public async Task NotifyFriendsOnline(Guid userId, CancellationToken cancellationToken)
+        public async Task NotifyFriendsOnline(Guid userId)
         {
-            List<FriendShip> friendShips = await _friendShipRepository.AllAcceptedFriendShipAsync(userId, cancellationToken).ConfigureAwait(false);
+            var cancellationToken = Context.ConnectionAborted;
+
+            List<FriendShip> friendShips =
+                await _friendShipRepository
+                    .AllAcceptedFriendShipAsync(userId, cancellationToken)
+                    .ConfigureAwait(false);
 
             List<Guid> friendIds = friendShips
                 .Select(x => x.RequesterId == userId ? x.AddresseeId : x.RequesterId)
@@ -34,8 +39,12 @@ namespace Snowly.WebAPI.SignalRControl
 
         public async Task NotifyFriendsOffline(Guid userId)
         {
-            List<FriendShip> friendShips = await _friendShipRepository.AllAcceptedFriendShipAsync(userId, CancellationToken.None)
-                .ConfigureAwait(false);
+            var cancellationToken = Context.ConnectionAborted;
+
+            List<FriendShip> friendShips =
+                await _friendShipRepository
+                    .AllAcceptedFriendShipAsync(userId, cancellationToken)
+                    .ConfigureAwait(false);
 
             List<Guid> friendIds = friendShips
                 .Select(x => x.RequesterId == userId ? x.AddresseeId : x.RequesterId)

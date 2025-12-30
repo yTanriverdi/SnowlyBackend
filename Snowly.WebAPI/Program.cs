@@ -12,6 +12,7 @@ using Snowly.WebAPI.JwtToken;
 using Snowly.WebAPI.SignalRControl;
 using Snowly.WebAPI.UserIdentifier;
 using Swashbuckle.AspNetCore.Filters;
+using System.Security.Claims;
 using System.Text;
 
 namespace Snowly.WebAPI
@@ -80,7 +81,9 @@ namespace Snowly.WebAPI
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = issuer,
                     ValidAudience = audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                    RoleClaimType = ClaimTypes.Role,
+                    NameClaimType = ClaimTypes.NameIdentifier
                 };
 
                 options.Events = new JwtBearerEvents
