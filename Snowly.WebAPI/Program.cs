@@ -45,7 +45,7 @@ namespace Snowly.WebAPI
                     policy
                         .WithOrigins(
                             "http://localhost:5173",
-                            "http://192.168.1.8:5173",
+                            "http://192.168.1.11:5173",
                             "https://seninfrontenddomainin.com"
                         )
                         .AllowAnyHeader()
