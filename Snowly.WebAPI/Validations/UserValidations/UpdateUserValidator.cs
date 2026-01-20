@@ -16,7 +16,7 @@ namespace Snowly.WebAPI.Validations.UserValidations
                 .Matches("^[a-zA-ZğüşıöçĞÜŞİÖÇ ]+$").WithMessage("İsim yalnızca harf içermelidir");
             RuleFor(x => x.LastName)
                 .NotEmpty().WithMessage("Soyad zorunludur")
-                .MinimumLength(3).WithMessage("Soyad en az 2 karakter uzunluğunda olabilir")
+                .MinimumLength(2).WithMessage("Soyad en az 2 karakter uzunluğunda olabilir")
                 .Matches("^[a-zA-ZğüşıöçĞÜŞİÖÇ ]+$").WithMessage("Soyad yalnızca harf içermelidir");
         }
     }
