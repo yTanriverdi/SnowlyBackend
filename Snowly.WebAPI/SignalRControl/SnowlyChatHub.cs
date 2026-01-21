@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using MediatR;
+using Microsoft.AspNetCore.SignalR;
+using Snowly.Application.Commands.UserCommands.OnlineUser;
 using Snowly.Application.Interfaces;
 using Snowly.Domain.Entities;
 using System.Runtime.CompilerServices;
@@ -8,10 +10,12 @@ namespace Snowly.WebAPI.SignalRControl
     public class SnowlyChatHub : Hub
     {
         private readonly IFriendShipRepository _friendShipRepository;
+        private readonly IMediator _mediator;
 
-        public SnowlyChatHub(IFriendShipRepository friendShipRepository)
+        public SnowlyChatHub(IFriendShipRepository friendShipRepository, IMediator mediator)
         {
             _friendShipRepository = friendShipRepository;
+            _mediator = mediator;
         }
 
         public async Task NotifyFriendsOnline(Guid userId)
@@ -59,6 +63,33 @@ namespace Snowly.WebAPI.SignalRControl
             }
         }
 
+
+
+        public override async Task OnConnectedAsync()
+        {
+            var userIdString = Context.UserIdentifier;
+
+            if (Guid.TryParse(userIdString, out var userId))
+            {
+                await _mediator.Send(new OnlineUserCommand(userId));
+                await NotifyFriendsOnline(userId);
+            }
+
+            await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            var userIdString = Context.UserIdentifier;
+
+            if (Guid.TryParse(userIdString, out var userId))
+            {
+                await _mediator.Send(new OnlineUserCommand(userId));
+                await NotifyFriendsOffline(userId);
+            }
+
+            await base.OnDisconnectedAsync(exception);
+        }
 
 
     }
