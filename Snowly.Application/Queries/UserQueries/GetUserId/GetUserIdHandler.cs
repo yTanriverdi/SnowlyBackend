@@ -24,6 +24,7 @@ namespace Snowly.Application.Queries.UserQueries.GetUserId
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                IsOnline = user.IsOnline,
             };
             return ApplicationHandlerResponse<GetUserIdResponse>.Ok(response, UserMessages.UserFound);
         }

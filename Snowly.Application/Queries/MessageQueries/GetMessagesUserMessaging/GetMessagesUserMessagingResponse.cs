@@ -9,6 +9,7 @@ namespace Snowly.Application.Queries.MessageQueries.GetMessagesUserMessaging
     public sealed class GetMessagesUserMessagingResponse
     {
         public Guid UserId { get; set; }
+        public bool IsOnline { get; set; }
         public bool IsLastMessageFromMe { get; set; }
         public string LastMessageContent { get; set; } = string.Empty;
         public DateTime LastMessageTime { get; set; }

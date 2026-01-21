@@ -40,6 +40,7 @@ namespace Snowly.Application.Queries.MessageQueries.GetMessagesUserMessaging
                     return new GetMessagesUserMessagingResponse
                     {
                         UserId = g.Key.Id,
+                        IsOnline = g.Key.IsOnline,
                         FullName = g.Key.FirstName + " " + g.Key.LastName,
                         LastMessageContent = _messageCrypto.Decrypt(lastMessage.Content),
                         LastMessageTime = lastMessage.CreateDate,
