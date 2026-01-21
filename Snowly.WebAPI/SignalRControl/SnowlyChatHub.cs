@@ -43,11 +43,9 @@ namespace Snowly.WebAPI.SignalRControl
 
         public async Task NotifyFriendsOffline(Guid userId)
         {
-            var cancellationToken = Context.ConnectionAborted;
-
             List<FriendShip> friendShips =
                 await _friendShipRepository
-                    .AllAcceptedFriendShipAsync(userId, cancellationToken)
+                    .AllAcceptedFriendShipAsync(userId, CancellationToken.None)
                     .ConfigureAwait(false);
 
             List<Guid> friendIds = friendShips
