@@ -6,6 +6,7 @@ using Snowly.Application.Commands.MessageCommands.CreateMessage;
 using Snowly.Application.Commands.MessageCommands.DeleteMessage;
 using Snowly.Application.Commands.MessageCommands.MarkReadMessage;
 using Snowly.Application.Queries.MessageQueries.GetMessagesBetweenUser;
+using Snowly.Application.Queries.MessageQueries.GetMessagesUserMessaging;
 using Snowly.Application.Response;
 using Snowly.WebAPI.APIResponse;
 using Snowly.WebAPI.SignalRControl;
@@ -69,6 +70,16 @@ namespace Snowly.WebAPI.Controllers
             ApplicationHandlerResponse<MarkReadMessageResponse> markReadResponse = await _mediator.Send(markReadMessageCommand, cancellationToken).ConfigureAwait(false);
             if (!markReadResponse.Success) return BadRequest(ApiResponse.FailResponse(markReadResponse.Message, 400));
             return Ok(ApiResponse<MarkReadMessageResponse>.SuccessResponse(markReadResponse.Data!, markReadResponse.Message, 200));
+        }
+
+
+        [Authorize("UserOrAdmin")]
+        [HttpGet("GetAllChats")]
+        public async Task<IActionResult> GetAllChats([FromQuery] GetMessagesUserMessagingQuery getMessagesUserMessagingQuery, CancellationToken cancellationToken)
+        {
+            ApplicationHandlerResponse<List<GetMessagesUserMessagingResponse>> chats = await _mediator.Send(getMessagesUserMessagingQuery, cancellationToken).ConfigureAwait(false);
+            if (!chats.Success) return BadRequest(ApiResponse.FailResponse(chats.Message, 400));
+            return Ok(ApiResponse<List<GetMessagesUserMessagingResponse>>.SuccessResponse(chats.Data!, chats.Message, 200));
         }
 
     }

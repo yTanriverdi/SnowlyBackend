@@ -50,5 +50,13 @@ namespace Snowly.Application.Interfaces
         /// <returns></returns>
         Task<Message?> GetMessageById(Guid messageId, CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Kullanıcı Id'ye ait olan tüm mesajları döner
+        /// </summary>
+        /// <param name="userId">Kullanıcı ID</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<List<Message>> GetAllMessagesByUserId(Guid userId, CancellationToken cancellationToken);
+
     }
 }
