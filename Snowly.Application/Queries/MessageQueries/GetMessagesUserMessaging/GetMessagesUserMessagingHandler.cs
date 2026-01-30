@@ -29,19 +29,22 @@ namespace Snowly.Application.Queries.MessageQueries.GetMessagesUserMessaging
 
             var chats = messages
                 .GroupBy(m => m.SenderId == request.UserId
-                    ? m.ReceiverUser
-                    : m.SenderUser)
+                 ? m.ReceiverId
+                 : m.SenderId)
                 .Select(g =>
                 {
                     var lastMessage = g
                         .OrderByDescending(x => x.CreateDate)
                         .First();
+                    var otherUser = lastMessage.SenderId == request.UserId
+                        ? lastMessage.ReceiverUser
+                        : lastMessage.SenderUser;
 
                     return new GetMessagesUserMessagingResponse
                     {
-                        UserId = g.Key.Id,
-                        IsOnline = g.Key.IsOnline,
-                        FullName = g.Key.FirstName + " " + g.Key.LastName,
+                        UserId = otherUser.Id,
+                        IsOnline = otherUser.IsOnline,
+                        FullName = otherUser.FirstName + " " + otherUser.LastName,
                         LastMessageContent = _messageCrypto.Decrypt(lastMessage.Content),
                         LastMessageTime = lastMessage.CreateDate,
                         IsLastMessageFromMe = lastMessage.SenderId == request.UserId,
