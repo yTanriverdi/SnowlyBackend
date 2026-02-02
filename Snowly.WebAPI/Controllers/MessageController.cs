@@ -42,7 +42,16 @@ namespace Snowly.WebAPI.Controllers
         {
             ApplicationHandlerResponse<CreateMessageResponse> addedMessage = await _mediator.Send(createMessageCommand, cancellationToken).ConfigureAwait(false);
             if (!addedMessage.Success) return BadRequest(ApiResponse.FailResponse(addedMessage.Message, 400));
-            await _snowlyChatHubContext.Clients.Users(createMessageCommand.ReceiverId.ToString(), createMessageCommand.SenderId.ToString()).SendAsync("ReceiveMessage", new { MessageId = addedMessage.Data!.Id, From = createMessageCommand.SenderId, Text = createMessageCommand.Content });
+            await _snowlyChatHubContext.Clients.Users(createMessageCommand.ReceiverId.ToString(), createMessageCommand.SenderId.ToString()).SendAsync("ReceiveMessage", 
+                new { 
+                    id = addedMessage.Data!.Id, 
+                    content = createMessageCommand.Content,
+                    senderId = createMessageCommand.SenderId,
+                    receiverId = createMessageCommand.ReceiverId,
+                    isRead = addedMessage.Data.IsRead,
+                    readAt = addedMessage.Data.ReadAt,
+                    createdAt = addedMessage.Data.CreatedAt
+                });
             return Ok(ApiResponse<CreateMessageResponse>.SuccessResponse(addedMessage.Data!, addedMessage.Message, 200));
         }
 
