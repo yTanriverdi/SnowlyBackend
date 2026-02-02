@@ -69,7 +69,7 @@ namespace Snowly.WebAPI.SignalRControl
 
             if (Guid.TryParse(userIdString, out var userId))
             {
-                await _mediator.Send(new OnlineUserCommand(userId));
+                await _mediator.Send(new OnlineUserCommand(userId, true));
                 await NotifyFriendsOnline(userId);
             }
 
@@ -82,7 +82,7 @@ namespace Snowly.WebAPI.SignalRControl
 
             if (Guid.TryParse(userIdString, out var userId))
             {
-                await _mediator.Send(new OnlineUserCommand(userId));
+                await _mediator.Send(new OnlineUserCommand(userId, false));
                 await NotifyFriendsOffline(userId);
             }
 

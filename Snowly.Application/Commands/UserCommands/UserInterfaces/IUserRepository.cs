@@ -75,9 +75,10 @@ namespace Snowly.Application.Commands.UserCommands.UserInterfaces
         /// <summary>
         /// Kullanıcı ID'ye ait olan kullanıcının Çevrimiçi olup olmadığını ayarlar
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="userId">Kullanıcının ID'si</param>
+        /// <param name="isOnline">Kullanıcı çıkış mı yapıyor giriş mi ?</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<bool> OnlineChangeAsync(Guid userId, CancellationToken cancellationToken);
+        Task<bool> OnlineChangeAsync(Guid userId, bool isOnline, CancellationToken cancellationToken);
     }
 }

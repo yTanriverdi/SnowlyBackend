@@ -3,5 +3,5 @@ using Snowly.Application.Response;
 
 namespace Snowly.Application.Commands.UserCommands.OnlineUser
 {
-    public record OnlineUserCommand(Guid UserId) : IRequest<ApplicationHandlerResponse<OnlineUserResponse>>;
+    public record OnlineUserCommand(Guid UserId, bool isOnline) : IRequest<ApplicationHandlerResponse<OnlineUserResponse>>;
 }

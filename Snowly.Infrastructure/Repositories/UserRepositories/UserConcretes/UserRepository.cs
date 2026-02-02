@@ -71,11 +71,11 @@ namespace Snowly.Infrastructure.Repositories.UserRepositories.UserConcretes
             return await _snowlyDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<bool> OnlineChangeAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<bool> OnlineChangeAsync(Guid userId, bool isOnline, CancellationToken cancellationToken)
         {
             User? user = await _snowlyDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken).ConfigureAwait(false);
             if(user == null) return false;
-            user.IsOnline = !user.IsOnline;
+            user.IsOnline = isOnline;
             await _snowlyDbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             return true;
         }

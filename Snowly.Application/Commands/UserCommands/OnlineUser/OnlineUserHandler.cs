@@ -16,7 +16,7 @@ namespace Snowly.Application.Commands.UserCommands.OnlineUser
 
         public async Task<ApplicationHandlerResponse<OnlineUserResponse>> Handle(OnlineUserCommand request, CancellationToken cancellationToken)
         {
-            bool result = await _userRepository.OnlineChangeAsync(request.UserId, cancellationToken).ConfigureAwait(false);
+            bool result = await _userRepository.OnlineChangeAsync(request.UserId, request.isOnline, cancellationToken).ConfigureAwait(false);
             if (!result) return ApplicationHandlerResponse<OnlineUserResponse>.Fail(UserMessages.OnlineStatusChangeFail);
             OnlineUserResponse onlineUserResponse = new OnlineUserResponse()
             {
