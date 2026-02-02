@@ -44,22 +44,7 @@ namespace Snowly.WebAPI
                 {
                     policy
                         .WithOrigins(
-                            "http://localhost:5173",
-                            "http://192.168.1.1:5173",
-                            "http://192.168.1.2:5173",
-                            "http://192.168.1.3:5173",
-                            "http://192.168.1.4:5173",
-                            "http://192.168.1.5:5173",
-                            "http://192.168.1.6:5173",
-                            "http://192.168.1.7:5173",
-                            "http://192.168.1.8:5173",
-                            "http://192.168.1.9:5173",
-                            "http://192.168.1.10:5173",
-                            "http://192.168.1.11:5173",
-                            "https://seninfrontenddomainin.com"
-                        )
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
+                        "https://chimerical-paletas-79e58c.netlify.app")
                         .AllowCredentials();
                 });
             });
