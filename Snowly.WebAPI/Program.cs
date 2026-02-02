@@ -44,8 +44,12 @@ namespace Snowly.WebAPI
                 {
                     policy
                         .WithOrigins(
-                        "https://chimerical-paletas-79e58c.netlify.app")
-                        .AllowCredentials();
+                    "http://localhost:5173",
+                    "https://chimerical-paletas-79e58c.netlify.app"
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
                 });
             });
 
