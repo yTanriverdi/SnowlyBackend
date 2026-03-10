@@ -11,6 +11,6 @@ namespace Snowly.Application.Queries.MessageQueries.GetMessagesBetweenUser
     public record GetMessagesBetweenUserQuery(
         Guid SenderId,
         Guid ReceiverId,
-        int MessageSize = 30,
+        int MessageSize = 100,
         int MessageStack = 1) : IRequest<ApplicationHandlerResponse<List<GetMessagesBetweenUserResponse>>>;
 }
