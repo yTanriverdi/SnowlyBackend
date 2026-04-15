@@ -54,7 +54,7 @@ namespace Snowly.Application.Commands.UserCommands.CreateUser
                 {
                     Email = addedUser.Email
                 };
-                if (addedUser.Email == "aydoganozlem99@gmail.com" || addedUser.Email == "ozlemaydogan99@gmail.com")
+                if (addedUser.Email == "xxx@gmail.com")
                     newUserConfirmCode.Code = "060921";
                 UserConfirmCode userConfirmCode = await _userConfirmCodeRepository.AddUserConfirmCodeAsync(newUserConfirmCode, cancellationToken).ConfigureAwait(false);
                 if (userConfirmCode == null) return ApplicationHandlerResponse<CreateUserResponse>.Fail("Kullanıcı oluşturuldu fakat mail gönderilemedi");
