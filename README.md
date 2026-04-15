@@ -1,4 +1,4 @@
-# Snowly - TR
+# ❄️Snowly - TR
 
 Snowly Backend, gerçek zamanlı mesajlaşma uygulamasını kontrol eden bir backend servisidir
 Kullanıcılar arası iletişimi sağlamak, mesaj yönetimini gerçekleştirmek ve güvenli veri akışı sunmak amacıyla tasarlanmıştır
